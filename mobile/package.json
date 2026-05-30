@@ -1,0 +1,45 @@
+{
+  "name": "mobile",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "dependencies": {
+    "@expo/metro-runtime": "^56.0.13",
+    "@react-navigation/native": "^7.2.5",
+    "expo": "~56.0.5",
+    "expo-asset": "^56.0.15",
+    "expo-font": "^56.0.5",
+    "expo-linear-gradient": "^56.0.4",
+    "expo-linking": "^56.0.12",
+    "expo-router": "^56.2.7",
+    "expo-status-bar": "~56.0.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-safe-area-context": "^5.8.0",
+    "react-native-screens": "^4.25.2",
+    "react-native-svg": "^15.15.5",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "babel-preset-expo": "^56.0.13",
+    "playwright": "^1.49.1",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build:web": "expo export --platform web --output-dir dist-web && node scripts/postbuild-web.js",
+    "preview:web": "npm run build:web && npx --yes serve dist-web -l 3000 -s",
+    "verify:web": "node scripts/verify-web.mjs",
+    "generate:data": "node scripts/generate-teas.mjs"
+  },
+  "private": true,
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}

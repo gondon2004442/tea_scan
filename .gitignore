@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Expo / web build
+.expo/
+dist/
+dist-web/
+web-build/
+expo-env.d.ts
+
+# Verify / local output
+verify-output/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.*
+.env
+.env*.local
+
+# Native (if generated later)
+/ios
+/android
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
