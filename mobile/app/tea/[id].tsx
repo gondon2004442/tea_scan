@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { images, teaImage } from '../../src/assets';
+import { images, placeholderCropOffset, teaImage, teaUsesPlaceholder } from '../../src/assets';
 import { CloudDivider } from '../../src/components/CloudDivider';
 import { SteepingDiagram } from '../../src/components/SteepingDiagram';
 import { formatTimeToDrink, getTeaById } from '../../src/data/teas';
@@ -34,12 +34,21 @@ export default function TeaDetailScreen() {
     return null;
   }
 
-  const imageStyle = {
-    width: IMG * 1.12,
-    height: IMG * 1.12,
-    marginLeft: -IMG * 0.06,
-    marginTop: -IMG * 0.06,
-  };
+  const isPlaceholder = teaUsesPlaceholder(tea);
+  const placeholderOffset = placeholderCropOffset(IMG);
+  const imageStyle = isPlaceholder
+    ? {
+        width: placeholderOffset.width,
+        height: placeholderOffset.height,
+        marginLeft: placeholderOffset.marginLeft,
+        marginTop: placeholderOffset.marginTop,
+      }
+    : {
+        width: IMG * 1.12,
+        height: IMG * 1.12,
+        marginLeft: -IMG * 0.06,
+        marginTop: -IMG * 0.06,
+      };
 
   return (
     <View style={styles.backdrop}>
@@ -55,13 +64,14 @@ export default function TeaDetailScreen() {
                 <View
                   style={[
                     styles.imageWrap,
+                    isPlaceholder && styles.imageWrapPlaceholder,
                     { width: IMG, height: IMG, borderRadius: RADIUS },
                   ]}
                 >
                   <Image
                     source={teaImage(tea.image)}
                     style={imageStyle}
-                    resizeMode="cover"
+                    resizeMode={isPlaceholder ? 'contain' : 'cover'}
                   />
                 </View>
                 <View style={styles.titleBlock}>
@@ -144,6 +154,9 @@ const styles = StyleSheet.create({
   imageWrap: {
     overflow: 'hidden',
     backgroundColor: '#000',
+  },
+  imageWrapPlaceholder: {
+    backgroundColor: colors.white,
   },
   titleBlock: {
     width: '100%',

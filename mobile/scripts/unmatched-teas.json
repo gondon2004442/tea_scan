@@ -1,170 +1,62 @@
 [
   {
-    "id": "longjing",
-    "name": "Longjing"
-  },
-  {
-    "id": "bi-luo-chun",
-    "name": "Bi Luo Chun"
-  },
-  {
-    "id": "huangshan-maofeng",
-    "name": "Huangshan Maofeng"
-  },
-  {
     "id": "lu-an-guapian",
-    "name": "Lu'an Guapian"
+    "name": "Lu'an Guapian",
+    "category": "Green"
   },
   {
-    "id": "xinyang-maojian",
-    "name": "Xinyang Maojian"
+    "id": "shou-mei",
+    "name": "Shou Mei",
+    "category": "White"
   },
   {
-    "id": "enshi-yulu",
-    "name": "Enshi Yulu"
-  },
-  {
-    "id": "mengding-ganlu",
-    "name": "Mengding Ganlu"
-  },
-  {
-    "id": "taiping-houkui",
-    "name": "Taiping Houkui"
-  },
-  {
-    "id": "anji-baicha",
-    "name": "Anji Baicha"
-  },
-  {
-    "id": "gunpowder",
-    "name": "Gunpowder"
-  },
-  {
-    "id": "chunmee",
-    "name": "Chunmee"
-  },
-  {
-    "id": "bai-hao-yin-zhen",
-    "name": "Bai Hao Yin Zhen"
-  },
-  {
-    "id": "bai-mu-dan",
-    "name": "Bai Mu Dan"
-  },
-  {
-    "id": "ya-bao",
-    "name": "Ya Bao"
-  },
-  {
-    "id": "junshan-yinzhen",
-    "name": "Junshan Yinzhen"
-  },
-  {
-    "id": "mengding-huangya",
-    "name": "Mengding Huangya"
-  },
-  {
-    "id": "huoshan-huangya",
-    "name": "Huoshan Huangya"
-  },
-  {
-    "id": "wuyi-rougui",
-    "name": "Wuyi Rougui"
-  },
-  {
-    "id": "wuyi-shui-xian",
-    "name": "Wuyi Shui Xian"
-  },
-  {
-    "id": "wuyi-qi-lan",
-    "name": "Wuyi Qi Lan"
-  },
-  {
-    "id": "wuyi-ba-xian",
-    "name": "Wuyi Ba Xian"
-  },
-  {
-    "id": "fenghuang-dan-cong-mi-lan-xiang",
-    "name": "Fenghuang Dan Cong – Mi Lan Xiang"
-  },
-  {
-    "id": "fenghuang-dan-cong-ya-shi-xiang",
-    "name": "Fenghuang Dan Cong – Ya Shi Xiang"
-  },
-  {
-    "id": "golden-osmanthus-oolong",
-    "name": "Golden Osmanthus Oolong"
-  },
-  {
-    "id": "zheng-shan-xiao-zhong",
-    "name": "Zheng Shan Xiao Zhong"
-  },
-  {
-    "id": "qimen-hong-cha",
-    "name": "Qimen Hong Cha"
-  },
-  {
-    "id": "dian-hong-golden-needle",
-    "name": "Dian Hong – Golden Needle"
-  },
-  {
-    "id": "jinjunmei",
-    "name": "Jinjunmei"
-  },
-  {
-    "id": "laoshan-black",
-    "name": "Laoshan Black"
-  },
-  {
-    "id": "yingde-hong-cha",
-    "name": "Yingde Hong Cha"
-  },
-  {
-    "id": "jasmine-mo-li-hua-cha",
-    "name": "Jasmine Mo Li Hua Cha"
+    "id": "gong-mei",
+    "name": "Gong Mei",
+    "category": "White"
   },
   {
     "id": "rose-black-tea",
-    "name": "Rose Black Tea"
+    "name": "Rose Black Tea",
+    "category": "Scented"
   },
   {
     "id": "pu-erh-sheng-yiwu-gushu",
-    "name": "Pu-erh Sheng – Yiwu Gushu"
+    "name": "Pu-erh Sheng – Yiwu Gushu",
+    "category": "Pu-erh"
   },
   {
     "id": "pu-erh-shou-menghai-ripe",
-    "name": "Pu-erh Shou – Menghai Ripe"
+    "name": "Pu-erh Shou – Menghai Ripe",
+    "category": "Pu-erh"
   },
   {
     "id": "liu-bao-hei-cha",
-    "name": "Liu Bao Hei Cha"
+    "name": "Liu Bao Hei Cha",
+    "category": "Dark"
   },
   {
     "id": "anhua-hei-cha",
-    "name": "Anhua Hei Cha"
+    "name": "Anhua Hei Cha",
+    "category": "Dark"
   },
   {
     "id": "fuzhuan-brick-tea",
-    "name": "Fuzhuan Brick Tea"
+    "name": "Fuzhuan Brick Tea",
+    "category": "Dark"
   },
   {
     "id": "tuocha",
-    "name": "Tuocha"
+    "name": "Tuocha",
+    "category": "Pu-erh"
   },
   {
     "id": "pu-erh-bing-cha",
-    "name": "Pu-erh Bing Cha"
+    "name": "Pu-erh Bing Cha",
+    "category": "Pu-erh"
   },
   {
     "id": "chenpi-pu-erh",
-    "name": "Chenpi Pu-erh"
-  },
-  {
-    "id": "gu-shu-hong",
-    "name": "Gu Shu Hong"
-  },
-  {
-    "id": "huangjin-gui",
-    "name": "Huangjin Gui"
+    "name": "Chenpi Pu-erh",
+    "category": "Pu-erh"
   }
 ]

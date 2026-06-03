@@ -11,6 +11,7 @@ export type TeaImageOffset = {
 type MyTeasPreviewTea = {
   id: string;
   name: string;
+  image?: string | null;
   imageAsset?: DemoTeaImageKey;
   imageOffset?: TeaImageOffset;
 };
@@ -33,10 +34,9 @@ export const demoTeaImages = {
   zgf: require('../assets/images/demo/tea-zgf.png'),
 } as const;
 
-export type DemoTeaImageKey = keyof typeof demoTeaImages;
+export const teaPlaceholderImage = require('../assets/images/tea-placeholder.png');
 
-const FALLBACK_TEA_IMAGE =
-  'https://cdn.shopify.com/s/files/1/0756/6553/9295/files/da-hong-pao-rock-oolong.webp?v=1774631232';
+export type DemoTeaImageKey = keyof typeof demoTeaImages;
 
 const bowl = layout.cardImageMyTeas;
 
@@ -81,11 +81,53 @@ function bowlKeyForTea(tea: Pick<MyTeasPreviewTea, 'id' | 'name'>): DemoTeaImage
   if (name.includes('da hong pao')) {
     return 'dhp1';
   }
-  return 'dhp1';
+  const pool: DemoTeaImageKey[] = ['dhp1', 'dhp2', 'zgf'];
+  const hash = tea.id.split('').reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+  return pool[hash % pool.length];
+}
+
+function listUrlCropOffset(): TeaImageOffset {
+  const zoom = 1.2;
+  return {
+    width: bowl * zoom,
+    height: bowl * zoom,
+    marginLeft: -bowl * ((zoom - 1) / 2),
+    marginTop: -bowl * ((zoom - 1) / 2),
+  };
+}
+
+/** Placeholder bowl in 160×160 circle: 144×109, centered */
+export function placeholderCropOffset(imageSize: number): TeaImageOffset {
+  const exploreCircle = layout.cardImageExplore;
+  const iconWidth = 144;
+  const iconHeight = 109;
+  const scale = imageSize / exploreCircle;
+  const width = iconWidth * scale;
+  const height = iconHeight * scale;
+  return {
+    width,
+    height,
+    marginLeft: (imageSize - width) / 2,
+    marginTop: (imageSize - height) / 2,
+  };
+}
+
+export function teaUsesPlaceholder(tea: {
+  id: string;
+  image?: string | null;
+  imageAsset?: DemoTeaImageKey;
+}): boolean {
+  if (tea.imageAsset && tea.id.startsWith('my-')) {
+    return false;
+  }
+  return !tea.image;
 }
 
 export function teaImage(imageUrl: string | null): ImageSourcePropType {
-  return { uri: imageUrl ?? FALLBACK_TEA_IMAGE };
+  if (!imageUrl) {
+    return teaPlaceholderImage;
+  }
+  return { uri: imageUrl };
 }
 
 export function resolveTeaImage(
@@ -98,14 +140,28 @@ export function resolveTeaImage(
   return teaImage(imageUrl);
 }
 
-/** My teas list: always bowl-style leaf photos from Figma assets */
+/** My teas list: Figma demo bowls for my-* ids, otherwise unique rooteas photo per tea */
 export function resolveMyTeasListImage(tea: MyTeasPreviewTea): {
   source: ImageSourcePropType;
   offset: TeaImageOffset;
 } {
-  const asset = tea.imageAsset ?? bowlKeyForTea(tea);
+  if (tea.imageAsset && tea.id.startsWith('my-')) {
+    const asset = tea.imageAsset;
+    return {
+      source: demoTeaImages[asset],
+      offset: tea.imageOffset ?? bowlPreviewOffsets[asset],
+    };
+  }
+
+  if (tea.image) {
+    return {
+      source: teaImage(tea.image),
+      offset: tea.imageOffset ?? listUrlCropOffset(),
+    };
+  }
+
   return {
-    source: demoTeaImages[asset],
-    offset: tea.imageOffset ?? bowlPreviewOffsets[asset],
+    source: teaPlaceholderImage,
+    offset: placeholderCropOffset(bowl),
   };
 }

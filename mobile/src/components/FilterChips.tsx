@@ -1,5 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors, typography } from '../theme';
+import { TimeIcon } from './icons/TimeIcons';
 
 const TIME_FILTERS = [
   { id: 'morning', label: 'Morning', icon: 'sun' as const },
@@ -38,7 +39,7 @@ export function FilterChips({
             style={[styles.chipTime, selectedTime === f.id && styles.chipActive]}
             onPress={() => onTimeChange(selectedTime === f.id ? null : f.id)}
           >
-            <Text style={styles.chipIcon}>{f.icon === 'moon' ? '☾' : '☼'}</Text>
+            <TimeIcon type={f.icon} size={16} />
             <Text style={styles.chipText}>{f.label}</Text>
           </Pressable>
         ))}

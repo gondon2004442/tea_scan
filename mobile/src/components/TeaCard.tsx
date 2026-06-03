@@ -1,7 +1,13 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { resolveMyTeasListImage, resolveTeaImage } from '../assets';
+import {
+  placeholderCropOffset,
+  resolveMyTeasListImage,
+  resolveTeaImage,
+  teaUsesPlaceholder,
+} from '../assets';
 import { Tea } from '../data/teas';
 import { colors, layout, typography } from '../theme';
+import { TimeIcon } from './icons/TimeIcons';
 
 type Variant = 'list' | 'grid';
 
@@ -36,10 +42,15 @@ export function TeaCard({ tea, variant, onPress }: Props) {
   const radius = imageSize / 2;
   const isList = variant === 'list';
   const timeIcon = resolveTimeIcon(tea);
+  const isPlaceholder = teaUsesPlaceholder(tea);
   const listPreview = isList ? resolveMyTeasListImage(tea) : null;
   const imageSource = listPreview?.source ?? resolveTeaImage(tea.image, tea.imageAsset);
-  const imageOffset = listPreview?.offset ?? tea.imageOffset;
+  const imageOffset =
+    listPreview?.offset ??
+    tea.imageOffset ??
+    (isPlaceholder ? placeholderCropOffset(imageSize) : undefined);
 
+  const exploreZoom = 1.28;
   const imageStyle = imageOffset
     ? {
         width: imageOffset.width,
@@ -47,25 +58,33 @@ export function TeaCard({ tea, variant, onPress }: Props) {
         marginLeft: imageOffset.marginLeft,
         marginTop: imageOffset.marginTop,
       }
-    : {
-        width: imageSize * 1.12,
-        height: imageSize * 1.12,
-        marginLeft: -imageSize * 0.06,
-        marginTop: -imageSize * 0.06,
-      };
+    : isList
+      ? {
+          width: imageSize * 1.12,
+          height: imageSize * 1.12,
+          marginLeft: -imageSize * 0.06,
+          marginTop: -imageSize * 0.06,
+        }
+      : {
+          width: imageSize * exploreZoom,
+          height: imageSize * exploreZoom,
+          marginLeft: -imageSize * ((exploreZoom - 1) / 2),
+          marginTop: -imageSize * ((exploreZoom - 1) / 2),
+        };
 
   return (
     <Pressable style={[styles.card, isList && styles.cardList]} onPress={onPress}>
       <View
         style={[
           styles.imageWrap,
+          isPlaceholder && styles.imageWrapPlaceholder,
           { width: imageSize, height: imageSize, borderRadius: radius },
         ]}
       >
         <Image
           source={imageSource}
           style={imageStyle}
-          resizeMode="cover"
+          resizeMode={isPlaceholder ? 'contain' : 'cover'}
         />
       </View>
       <View style={[styles.labelWrap, isList && styles.labelWrapList]}>
@@ -82,7 +101,9 @@ export function TeaCard({ tea, variant, onPress }: Props) {
             {tea.name}
           </Text>
           {timeIcon !== 'none' && (
-            <Text style={styles.timeIconText}>{timeIcon === 'sun' ? '☼' : '☾'}</Text>
+            <View style={styles.timeIconWrap}>
+              <TimeIcon type={timeIcon} size={layout.timeIconSize} />
+            </View>
           )}
         </View>
         {!isList && <Text style={styles.timeHint}>{displayTimeHint(tea.timeToDrink)}</Text>}
@@ -102,6 +123,9 @@ const styles = StyleSheet.create({
   imageWrap: {
     overflow: 'hidden',
     backgroundColor: 'transparent',
+  },
+  imageWrapPlaceholder: {
+    backgroundColor: colors.white,
   },
   labelWrap: {
     alignItems: 'center',
@@ -132,18 +156,11 @@ const styles = StyleSheet.create({
   nameMedium: {
     fontWeight: '500',
   },
-  timeIcon: {
+  timeIconWrap: {
     width: layout.timeIconSize,
     height: layout.timeIconSize,
-    flexShrink: 0,
-  },
-  timeIconText: {
-    width: layout.timeIconSize,
-    height: layout.timeIconSize,
-    color: colors.textPrimary,
-    fontSize: 16,
-    lineHeight: 20,
-    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
   },
   timeHint: {
