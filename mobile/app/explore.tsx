@@ -1,17 +1,24 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { images } from '../src/assets';
 import { DesignFrame } from '../src/components/DesignFrame';
 import { FilterChips } from '../src/components/FilterChips';
-import { ScreenHeader } from '../src/components/ScreenHeader';
 import { ScreenShell } from '../src/components/ScreenShell';
+import { ScrollUnderHeader } from '../src/components/ScrollUnderHeader';
 import { TeaCard } from '../src/components/TeaCard';
+import { useTeaModal } from '../src/context/TeaModalContext';
 import { TEAS } from '../src/data/teas';
+import { useFavorites } from '../src/hooks/useFavorites';
+import { useRequireAuth } from '../src/hooks/useRequireAuth';
 import { useTimeOfDay } from '../src/hooks/useTimeOfDay';
 import { layout, timePalettes } from '../src/theme';
 
 export default function ExploreScreen() {
   const router = useRouter();
+  const { openTea } = useTeaModal();
+  const { hasMyTeasTab } = useFavorites();
+  useRequireAuth();
   const { timeOfDay } = useTimeOfDay();
   const [timeFilter, setTimeFilter] = useState<'morning' | 'afternoon' | 'evening' | null>(
     null,
@@ -19,6 +26,11 @@ export default function ExploreScreen() {
   const [typeFilter, setTypeFilter] = useState<
     'Red' | 'Oolong' | 'Green' | 'Pu-erh' | 'White' | null
   >(null);
+
+  const tabMode = hasMyTeasTab ? 'dual' : 'exploreOnly';
+  const filtersTop = layout.exploreFiltersTopExploreOnly;
+  const gridTopMargin = layout.exploreGridGapBelowFilters;
+  const headerHeight = layout.exploreOnlyChromeHeight;
 
   const filteredTeas = useMemo(() => {
     return TEAS.filter((tea) => {
@@ -38,62 +50,63 @@ export default function ExploreScreen() {
         colors={timePalettes.explore[timeOfDay]}
         locations={[0, 0.6]}
       >
-        <View style={styles.content}>
-          <ScreenHeader
-            activeTab="explore"
-            onTabChange={(tab) => {
-              if (tab === 'my') router.replace('/my-teas');
-            }}
-          />
+        <ScrollUnderHeader
+          activeTab="explore"
+          tabMode={tabMode}
+          onTabChange={(tab) => {
+            if (tab === 'my') router.replace('/my-teas');
+          }}
+          paddingTop={filtersTop}
+          headerHeight={headerHeight}
+          headerExtra={
+            tabMode === 'dual' ? (
+              <Image
+                source={images.iconSettings}
+                style={styles.settings}
+                resizeMode="contain"
+              />
+            ) : null
+          }
+        >
           <FilterChips
             selectedTime={timeFilter}
             selectedType={typeFilter}
             onTimeChange={setTimeFilter}
             onTypeChange={setTypeFilter}
           />
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.grid}>
-              {filteredTeas.map((tea) => (
-                <View key={tea.id} style={styles.gridItem}>
-                  <TeaCard
-                    tea={tea}
-                    variant="grid"
-                    onPress={() => router.push(`/tea/${tea.id}`)}
-                  />
-                </View>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
+          <View style={[styles.grid, styles.gridOffset, { marginTop: gridTopMargin }]}>
+            {filteredTeas.map((tea) => (
+              <View key={tea.id} style={styles.gridItem}>
+                <TeaCard
+                  tea={tea}
+                  variant="grid"
+                  onPress={() => openTea(tea.id)}
+                />
+              </View>
+            ))}
+          </View>
+        </ScrollUnderHeader>
       </ScreenShell>
     </DesignFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    width: '100%',
-    minHeight: 0,
-  },
-  scroll: {
-    flex: 1,
-    minHeight: 0,
-  },
-  scrollContent: {
-    paddingTop: 4,
-    paddingHorizontal: layout.exploreGridLeft,
-    paddingBottom: 16,
+  settings: {
+    position: 'absolute',
+    top: layout.headerIconTop,
+    right: layout.headerIconLeft,
+    width: layout.headerIconSize,
+    height: layout.headerIconSize,
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     columnGap: layout.gridGap,
     rowGap: layout.gridGap,
+  },
+  gridOffset: {
+    marginHorizontal: layout.exploreGridLeft,
   },
   gridItem: {
     width: layout.cardImageExplore,

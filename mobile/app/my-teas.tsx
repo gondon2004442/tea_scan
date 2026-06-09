@@ -1,31 +1,29 @@
-import { useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Redirect, useRouter } from 'expo-router';
+import { StyleSheet } from 'react-native';
 import { DesignFrame } from '../src/components/DesignFrame';
-import { ScreenHeader } from '../src/components/ScreenHeader';
 import { ScreenShell } from '../src/components/ScreenShell';
+import { ScrollUnderHeader } from '../src/components/ScrollUnderHeader';
 import { TeaCard } from '../src/components/TeaCard';
-import { getTeasByIds, MY_TEAS } from '../src/data/teas';
+import { useTeaModal } from '../src/context/TeaModalContext';
+import { getTeasByIds } from '../src/data/teas';
+import { useFavorites } from '../src/hooks/useFavorites';
+import { useRequireAuth } from '../src/hooks/useRequireAuth';
 import { useTimeOfDay } from '../src/hooks/useTimeOfDay';
-import { getFavorites } from '../src/storage/favorites.web';
 import { layout, timePalettes } from '../src/theme';
 
 export default function MyTeasScreen() {
   const router = useRouter();
+  const { openTea } = useTeaModal();
   const { timeOfDay } = useTimeOfDay();
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const { favoriteIds, hasMyTeasTab } = useFavorites();
+  useRequireAuth();
 
-  useEffect(() => {
-    setFavoriteIds(getFavorites());
-    const sync = () => setFavoriteIds(getFavorites());
-    window.addEventListener('focus', sync);
-    return () => window.removeEventListener('focus', sync);
-  }, []);
+  const tabMode = hasMyTeasTab ? 'dual' : 'exploreOnly';
+  const teasToRender = getTeasByIds(favoriteIds);
 
-  const teasToRender = useMemo(() => {
-    const favorites = getTeasByIds(favoriteIds);
-    return favorites.length > 0 ? favorites : MY_TEAS;
-  }, [favoriteIds]);
+  if (teasToRender.length === 0) {
+    return <Redirect href="/explore" />;
+  }
 
   return (
     <DesignFrame>
@@ -33,46 +31,31 @@ export default function MyTeasScreen() {
         colors={timePalettes.my[timeOfDay]}
         locations={[0, 0.6]}
       >
-        <View style={styles.content}>
-          <ScreenHeader
-            activeTab="my"
-            onTabChange={(tab) => {
-              if (tab === 'explore') router.replace('/explore');
-            }}
-          />
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            {teasToRender.map((tea) => (
-              <TeaCard
-                key={tea.id}
-                tea={tea}
-                variant="list"
-                onPress={() => router.push(`/tea/${tea.id}`)}
-              />
-            ))}
-          </ScrollView>
-        </View>
+        <ScrollUnderHeader
+          activeTab="my"
+          tabMode={tabMode}
+          onTabChange={(tab) => {
+            if (tab === 'explore') router.replace('/explore');
+          }}
+          paddingTop={layout.myTeasListTop}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {teasToRender.map((tea) => (
+            <TeaCard
+              key={tea.id}
+              tea={tea}
+              variant="list"
+              onPress={() => openTea(tea.id)}
+            />
+          ))}
+        </ScrollUnderHeader>
       </ScreenShell>
     </DesignFrame>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    width: '100%',
-    minHeight: 0,
-  },
-  scroll: {
-    flex: 1,
-    minHeight: 0,
-  },
   scrollContent: {
-    paddingTop: 0,
-    paddingBottom: 24,
     alignItems: 'center',
     gap: layout.listItemGap,
   },

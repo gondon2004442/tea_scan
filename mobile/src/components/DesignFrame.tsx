@@ -1,5 +1,6 @@
 import { Platform, StyleSheet, View, type ViewProps } from 'react-native';
 import { DESIGN } from '../theme';
+import { TeaDetailModal } from './TeaDetailModal';
 
 /** Figma frame 390×844 — centered on web */
 export function DesignFrame({ children, style, ...rest }: ViewProps) {
@@ -7,6 +8,7 @@ export function DesignFrame({ children, style, ...rest }: ViewProps) {
     <View style={styles.outer}>
       <View style={[styles.frame, style]} {...rest}>
         {children}
+        <TeaDetailModal />
       </View>
     </View>
   );
@@ -26,6 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: DESIGN.width,
     maxWidth: '100%',
+    position: 'relative',
     backgroundColor: '#dce49c',
     overflow: 'hidden',
     ...(Platform.OS === 'web'

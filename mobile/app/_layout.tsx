@@ -5,6 +5,8 @@ import { Platform, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 import { ErrorBoundary } from '../src/components/ErrorBoundary';
+import { TeaModalProvider } from '../src/context/TeaModalContext';
+import { useAppFonts } from '../src/fonts';
 
 enableScreens(Platform.OS !== 'web');
 
@@ -14,30 +16,32 @@ const rootStyle =
     : { flex: 1 };
 
 export default function RootLayout() {
+  const { loaded } = useAppFonts();
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <ErrorBoundary>
       <SafeAreaProvider>
-        <View style={rootStyle}>
-          <StatusBar style="dark" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              animation: 'fade',
-              contentStyle: { flex: 1 },
-            }}
-          >
-            <Stack.Screen name="index" />
-            <Stack.Screen name="my-teas" />
-            <Stack.Screen name="explore" />
-            <Stack.Screen
-              name="tea/[id]"
-              options={{
-                presentation: Platform.OS === 'web' ? 'modal' : 'transparentModal',
-                animation: 'slide_from_bottom',
+        <TeaModalProvider>
+          <View style={rootStyle}>
+            <StatusBar style="dark" />
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                animation: 'fade',
+                contentStyle: { flex: 1 },
               }}
-            />
-          </Stack>
-        </View>
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="login" />
+              <Stack.Screen name="my-teas" />
+              <Stack.Screen name="explore" />
+            </Stack>
+          </View>
+        </TeaModalProvider>
       </SafeAreaProvider>
     </ErrorBoundary>
   );

@@ -26,6 +26,8 @@ export const images = {
   iconSettings: require('../assets/images/icon-settings.png'),
   divider: require('../assets/images/divider.png'),
   cloud: require('../assets/images/cloud.png'),
+  loginLeavesBg: require('../assets/images/login/leaves-bg.png'),
+  loginGoogleSignIn: require('../assets/images/login/google-sign-in.png'),
 } as const;
 
 export const demoTeaImages = {

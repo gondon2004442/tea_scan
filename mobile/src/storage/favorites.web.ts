@@ -22,11 +22,26 @@ export function setFavorites(ids: string[]) {
   window.localStorage.setItem(KEY, JSON.stringify([...new Set(ids)]));
 }
 
+export function clearFavorites(): void {
+  if (!isBrowser()) return;
+  window.localStorage.removeItem(KEY);
+  notifyFavoritesChanged();
+}
+
+export const FAVORITES_CHANGED_EVENT = 'tea-scan:favorites-changed';
+
+function notifyFavoritesChanged() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(FAVORITES_CHANGED_EVENT));
+  }
+}
+
 export function toggleFavorite(id: string): string[] {
   const current = getFavorites();
   const next = current.includes(id)
     ? current.filter((item) => item !== id)
     : [...current, id];
   setFavorites(next);
+  notifyFavoritesChanged();
   return next;
 }
