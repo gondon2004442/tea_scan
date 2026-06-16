@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { isSignedIn } from '../storage/session.web';
+import { isSignedIn } from '../storage/session';
 
 export function useRequireAuth() {
   const router = useRouter();

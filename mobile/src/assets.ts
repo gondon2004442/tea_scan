@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from 'react-native';
+import { TEA_IMAGE_SOURCES } from './data/tea-images.generated';
 import { layout } from './theme';
 
 export type TeaImageOffset = {
@@ -88,14 +89,21 @@ function bowlKeyForTea(tea: Pick<MyTeasPreviewTea, 'id' | 'name'>): DemoTeaImage
   return pool[hash % pool.length];
 }
 
-function listUrlCropOffset(): TeaImageOffset {
-  const zoom = 1.2;
+export function bowlCoverImageStyle(imageSize: number): TeaImageOffset {
   return {
-    width: bowl * zoom,
-    height: bowl * zoom,
-    marginLeft: -bowl * ((zoom - 1) / 2),
-    marginTop: -bowl * ((zoom - 1) / 2),
+    width: imageSize,
+    height: imageSize,
+    marginLeft: 0,
+    marginTop: 0,
   };
+}
+
+export function bowlContainImageStyle(imageSize: number): TeaImageOffset {
+  return bowlCoverImageStyle(imageSize);
+}
+
+function listUrlCropOffset(): TeaImageOffset {
+  return bowlCoverImageStyle(bowl);
 }
 
 /** Placeholder bowl in 160×160 circle: 144×109, centered */
@@ -122,24 +130,43 @@ export function teaUsesPlaceholder(tea: {
   if (tea.imageAsset && tea.id.startsWith('my-')) {
     return false;
   }
+  if (TEA_IMAGE_SOURCES[tea.id]) {
+    return false;
+  }
   return !tea.image;
 }
 
-export function teaImage(imageUrl: string | null): ImageSourcePropType {
-  if (!imageUrl) {
-    return teaPlaceholderImage;
-  }
-  return { uri: imageUrl };
-}
-
-export function resolveTeaImage(
+export function resolveTeaImageSource(
+  teaId: string,
   imageUrl: string | null,
   imageAsset?: DemoTeaImageKey,
 ): ImageSourcePropType {
   if (imageAsset) {
     return demoTeaImages[imageAsset];
   }
-  return teaImage(imageUrl);
+  if (TEA_IMAGE_SOURCES[teaId]) {
+    return TEA_IMAGE_SOURCES[teaId];
+  }
+  if (imageUrl) {
+    return { uri: imageUrl };
+  }
+  return teaPlaceholderImage;
+}
+
+export function resolveTeaImage(
+  teaId: string,
+  imageUrl: string | null,
+  imageAsset?: DemoTeaImageKey,
+): ImageSourcePropType {
+  return resolveTeaImageSource(teaId, imageUrl, imageAsset);
+}
+
+export function getTeaImagePreloadSources(): ImageSourcePropType[] {
+  return [
+    ...Object.values(TEA_IMAGE_SOURCES),
+    ...Object.values(demoTeaImages),
+    teaPlaceholderImage,
+  ];
 }
 
 /** My teas list: Figma demo bowls for my-* ids, otherwise unique rooteas photo per tea */
@@ -155,9 +182,9 @@ export function resolveMyTeasListImage(tea: MyTeasPreviewTea): {
     };
   }
 
-  if (tea.image) {
+  if (tea.image || TEA_IMAGE_SOURCES[tea.id]) {
     return {
-      source: teaImage(tea.image),
+      source: resolveTeaImageSource(tea.id, tea.image ?? null),
       offset: tea.imageOffset ?? listUrlCropOffset(),
     };
   }

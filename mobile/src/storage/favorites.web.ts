@@ -1,5 +1,9 @@
 const KEY = 'tea-scan:favorites';
 
+export async function hydrateFavorites(): Promise<void> {
+  // localStorage is synchronous on web.
+}
+
 function isBrowser() {
   return typeof window !== 'undefined' && !!window.localStorage;
 }

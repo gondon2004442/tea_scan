@@ -1,5 +1,5 @@
 import { Redirect } from 'expo-router';
-import { isSignedIn } from '../src/storage/session.web';
+import { isSignedIn } from '../src/storage/session';
 
 export default function Index() {
   if (!isSignedIn()) {

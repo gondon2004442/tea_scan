@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   placeholderCropOffset,
   resolveMyTeasListImage,
@@ -8,6 +8,7 @@ import {
 import { Tea } from '../data/teas';
 import { colors, layout, typography } from '../theme';
 import { TimeIcon } from './icons/TimeIcons';
+import { TeaImage } from './TeaImage';
 
 type Variant = 'list' | 'grid';
 
@@ -44,13 +45,13 @@ export function TeaCard({ tea, variant, onPress }: Props) {
   const timeIcon = resolveTimeIcon(tea);
   const isPlaceholder = teaUsesPlaceholder(tea);
   const listPreview = isList ? resolveMyTeasListImage(tea) : null;
-  const imageSource = listPreview?.source ?? resolveTeaImage(tea.image, tea.imageAsset);
+  const imageSource =
+    listPreview?.source ?? resolveTeaImage(tea.id, tea.image, tea.imageAsset);
   const imageOffset =
     listPreview?.offset ??
     tea.imageOffset ??
     (isPlaceholder ? placeholderCropOffset(imageSize) : undefined);
 
-  const exploreZoom = 1.28;
   const imageStyle = imageOffset
     ? {
         width: imageOffset.width,
@@ -58,19 +59,11 @@ export function TeaCard({ tea, variant, onPress }: Props) {
         marginLeft: imageOffset.marginLeft,
         marginTop: imageOffset.marginTop,
       }
-    : isList
-      ? {
-          width: imageSize * 1.12,
-          height: imageSize * 1.12,
-          marginLeft: -imageSize * 0.06,
-          marginTop: -imageSize * 0.06,
-        }
-      : {
-          width: imageSize * exploreZoom,
-          height: imageSize * exploreZoom,
-          marginLeft: -imageSize * ((exploreZoom - 1) / 2),
-          marginTop: -imageSize * ((exploreZoom - 1) / 2),
-        };
+    : {
+        width: imageSize,
+        height: imageSize,
+      };
+  const imageFit = isPlaceholder ? 'contain' : 'cover';
 
   return (
     <Pressable style={[styles.card, isList && styles.cardList]} onPress={onPress}>
@@ -81,10 +74,10 @@ export function TeaCard({ tea, variant, onPress }: Props) {
           { width: imageSize, height: imageSize, borderRadius: radius },
         ]}
       >
-        <Image
+        <TeaImage
           source={imageSource}
           style={imageStyle}
-          resizeMode={isPlaceholder ? 'contain' : 'cover'}
+          contentFit={imageFit}
         />
       </View>
       <View style={[styles.labelWrap, isList && styles.labelWrapList]}>

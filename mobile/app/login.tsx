@@ -10,7 +10,7 @@ import { DesignFrame } from '../src/components/DesignFrame';
 
 import { ScreenShell } from '../src/components/ScreenShell';
 
-import { isSignedIn, signInWithGoogleMock } from '../src/storage/session.web';
+import { isSignedIn, signInWithGoogleMock } from '../src/storage/session';
 
 import { colors, layout, typography } from '../src/theme';
 

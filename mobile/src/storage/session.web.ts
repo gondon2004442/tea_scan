@@ -1,6 +1,10 @@
-import { clearFavorites } from './favorites.web';
+import { clearFavorites } from './favorites';
 
 const SIGNED_IN_KEY = 'tea-scan:signed-in';
+
+export async function hydrateSession(): Promise<void> {
+  // localStorage is synchronous on web.
+}
 
 function isBrowser() {
   return typeof window !== 'undefined' && !!window.localStorage;

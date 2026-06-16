@@ -9,12 +9,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import { images, placeholderCropOffset, teaImage, teaUsesPlaceholder } from '../assets';
+import { images, placeholderCropOffset, resolveTeaImageSource, teaUsesPlaceholder } from '../assets';
 import { useTeaModal } from '../context/TeaModalContext';
 import { CloudDivider } from './CloudDivider';
 import { SteepingDiagram } from './SteepingDiagram';
+import { TeaImage } from './TeaImage';
 import { formatTimeToDrink, getTeaById } from '../data/teas';
-import { getFavorites, toggleFavorite } from '../storage/favorites.web';
+import { getFavorites, toggleFavorite } from '../storage/favorites';
 import { colors, DESIGN, typography } from '../theme';
 
 const IMG = 206;
@@ -95,10 +96,8 @@ export function TeaDetailModal() {
         marginTop: placeholderOffset.marginTop,
       }
     : {
-        width: IMG * 1.12,
-        height: IMG * 1.12,
-        marginLeft: -IMG * 0.06,
-        marginTop: -IMG * 0.06,
+        width: IMG,
+        height: IMG,
       };
 
   return (
@@ -134,10 +133,10 @@ export function TeaDetailModal() {
                       { width: IMG, height: IMG, borderRadius: RADIUS },
                     ]}
                   >
-                    <Image
-                      source={teaImage(tea.image)}
+                    <TeaImage
+                      source={resolveTeaImageSource(tea.id, tea.image, tea.imageAsset)}
                       style={imageStyle}
-                      resizeMode={isPlaceholder ? 'contain' : 'cover'}
+                      contentFit={isPlaceholder ? 'contain' : 'cover'}
                     />
                   </View>
                   <View style={styles.titleBlock}>
@@ -226,7 +225,7 @@ const styles = StyleSheet.create({
   },
   imageWrap: {
     overflow: 'hidden',
-    backgroundColor: '#000',
+    backgroundColor: 'transparent',
   },
   imageWrapPlaceholder: {
     backgroundColor: colors.white,
