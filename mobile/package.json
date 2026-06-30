@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.69.0",
     "@expo/metro-runtime": "^56.0.13",
     "@react-native-async-storage/async-storage": "2.1.2",
     "expo": "~56.0.5",
@@ -36,8 +35,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:web": "expo export --platform web --output-dir dist-web",
-    "preview:web": "npm run build:web && npx --yes expo serve dist-web --port 3000",
+    "build:web": "expo export --platform web --output-dir dist-web && node scripts/postbuild-web.js",
+    "preview:web": "npm run build:web && npx --yes serve dist-web -l 3000 -s",
     "verify:web": "node scripts/verify-web.mjs",
     "generate:data": "node scripts/generate-teas.mjs",
     "generate:icons": "node scripts/generate-app-icons.mjs",
