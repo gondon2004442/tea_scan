@@ -54,6 +54,7 @@ export default function RootLayout() {
               <Stack.Screen name="login" />
               <Stack.Screen name="my-teas" />
               <Stack.Screen name="explore" />
+              <Stack.Screen name="quiz" />
             </Stack>
           </View>
         </TeaModalProvider>

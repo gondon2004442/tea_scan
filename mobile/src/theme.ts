@@ -14,6 +14,12 @@ export const colors = {
   loginButtonBorder: 'rgba(255, 255, 255, 0.55)',
   exploreGradientStart: '#9CAAE4',
   exploreGradientEnd: '#F5EEFF',
+  quizGradientStart: '#C9B8F0',
+  quizGradientEnd: '#F5EEFF',
+  searchBarBg: 'rgba(255, 255, 255, 0.72)',
+  searchBarBorder: 'rgba(0, 0, 0, 0.08)',
+  aiAnswerBg: 'rgba(255, 255, 255, 0.82)',
+  sourceLink: '#3A2A6B',
   modalCard: '#FDFCFD',
   modalBackdrop: '#2A2A2A',
   steepingRing: '#E7EDBD',
@@ -38,6 +44,11 @@ export const timePalettes = {
     morning: ['#DCE49C', '#FFFFFF'] as const,
     afternoon: ['#9CAAE4', '#F5EEFF'] as const,
     evening: ['#9CAAE4', '#F5EEFF'] as const,
+  },
+  quiz: {
+    morning: ['#C9B8F0', '#F5EEFF'] as const,
+    afternoon: ['#C9B8F0', '#F5EEFF'] as const,
+    evening: ['#B7A6E6', '#F5EEFF'] as const,
   },
 } as const;
 

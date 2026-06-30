@@ -1,9 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { SmileIcon } from './icons/SmileIcon';
 import { layout } from '../theme';
-import { TabMode, TabToggle } from './TabToggle';
-
-type Tab = 'my' | 'explore';
+import { TabMode, TabToggle, type Tab } from './TabToggle';
 
 type Props = {
   activeTab: Tab;
@@ -12,62 +10,30 @@ type Props = {
 };
 
 export function ScreenHeader({ activeTab, tabMode, onTabChange }: Props) {
-  if (tabMode === 'exploreOnly') {
-    return (
-      <View style={styles.headerExploreOnly}>
-        <View style={styles.smileExploreOnly}>
-          <SmileIcon size={layout.headerIconSize} />
-        </View>
-        <View style={styles.exploreOnlyPillWrap}>
-          <TabToggle active={activeTab} mode="exploreOnly" onChange={onTabChange} />
-        </View>
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.headerDual}>
-      <View style={styles.smileDual}>
+    <View style={styles.header}>
+      <View style={styles.smile}>
         <SmileIcon size={layout.headerIconSize} />
       </View>
       <View style={styles.toggleWrap}>
-        <TabToggle active={activeTab} mode="dual" onChange={onTabChange} />
+        <TabToggle active={activeTab} mode={tabMode} onChange={onTabChange} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerExploreOnly: {
+  header: {
     width: '100%',
     height: layout.exploreOnlyChromeHeight,
     position: 'relative',
   },
-  headerDual: {
-    width: '100%',
-    height: layout.exploreOnlyChromeHeight,
-    position: 'relative',
-  },
-  smileExploreOnly: {
+  smile: {
     position: 'absolute',
     left: layout.headerIconLeft,
     top: layout.firstOpenSmileTop,
     width: layout.headerIconSize,
     height: layout.headerIconSize,
-  },
-  smileDual: {
-    position: 'absolute',
-    left: layout.headerIconLeft,
-    top: layout.firstOpenSmileTop,
-    width: layout.headerIconSize,
-    height: layout.headerIconSize,
-  },
-  exploreOnlyPillWrap: {
-    position: 'absolute',
-    left: layout.exploreOnlyToggleLeft,
-    top: layout.exploreOnlyToggleTop,
-    width: layout.exploreOnlyToggleWidth,
-    height: layout.exploreOnlyToggleHeight,
   },
   toggleWrap: {
     position: 'absolute',
@@ -77,4 +43,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-

@@ -7,9 +7,7 @@ import {
 } from 'react-native';
 import { layout } from '../theme';
 import { ScreenHeader } from './ScreenHeader';
-import type { TabMode } from './TabToggle';
-
-type Tab = 'my' | 'explore';
+import type { Tab, TabMode } from './TabToggle';
 
 type Props = {
   activeTab: Tab;

@@ -36,6 +36,7 @@ export default function MyTeasScreen() {
           tabMode={tabMode}
           onTabChange={(tab) => {
             if (tab === 'explore') router.replace('/explore');
+            if (tab === 'quiz') router.replace('/quiz');
           }}
           paddingTop={layout.myTeasListTop}
           contentContainerStyle={styles.scrollContent}
