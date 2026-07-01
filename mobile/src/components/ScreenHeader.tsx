@@ -1,4 +1,5 @@
-import { StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { SmileIcon } from './icons/SmileIcon';
 import { layout } from '../theme';
 import { TabMode, TabToggle, type Tab } from './TabToggle';
@@ -10,11 +11,18 @@ type Props = {
 };
 
 export function ScreenHeader({ activeTab, tabMode, onTabChange }: Props) {
+  const router = useRouter();
   return (
     <View style={styles.header}>
-      <View style={styles.smile}>
+      <Pressable
+        style={styles.smile}
+        onPress={() => router.push('/account')}
+        accessibilityRole="button"
+        accessibilityLabel="Account"
+        hitSlop={12}
+      >
         <SmileIcon size={layout.headerIconSize} />
-      </View>
+      </Pressable>
       <View style={styles.toggleWrap}>
         <TabToggle active={activeTab} mode={tabMode} onChange={onTabChange} />
       </View>
