@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import { images } from '../src/assets';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { AiResultCard } from '../src/components/AiResultCard';
 import { DesignFrame } from '../src/components/DesignFrame';
 import { FilterChips } from '../src/components/FilterChips';
@@ -127,15 +126,6 @@ export default function ExploreScreen() {
           }}
           paddingTop={filtersTop}
           headerHeight={headerHeight}
-          headerExtra={
-            tabMode === 'dual' ? (
-              <Image
-                source={images.iconSettings}
-                style={styles.settings}
-                resizeMode="contain"
-              />
-            ) : null
-          }
         >
           <SearchBar
             value={query}
@@ -174,13 +164,6 @@ export default function ExploreScreen() {
 }
 
 const styles = StyleSheet.create({
-  settings: {
-    position: 'absolute',
-    top: layout.headerIconTop,
-    right: layout.headerIconLeft,
-    width: layout.headerIconSize,
-    height: layout.headerIconSize,
-  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

@@ -23,7 +23,7 @@ export function ScreenHeader({ activeTab, tabMode, onTabChange }: Props) {
       >
         <SmileIcon size={layout.headerIconSize} />
       </Pressable>
-      <View style={styles.toggleWrap}>
+      <View style={styles.toggleWrap} pointerEvents="box-none">
         <TabToggle active={activeTab} mode={tabMode} onChange={onTabChange} />
       </View>
     </View>
