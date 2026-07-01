@@ -10,7 +10,7 @@ import { DesignFrame } from '../src/components/DesignFrame';
 
 import { ScreenShell } from '../src/components/ScreenShell';
 
-import { isSignedIn, signInWithGoogleMock } from '../src/storage/session';
+import { isSignedIn, signInWithGoogle } from '../src/storage/session';
 
 import { colors, layout, typography } from '../src/theme';
 
@@ -34,11 +34,21 @@ export default function LoginScreen() {
 
 
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
 
-    signInWithGoogleMock();
+    try {
 
-    router.replace('/explore');
+      await signInWithGoogle();
+
+      router.replace('/explore');
+
+    } catch (err) {
+
+      // User closed the popup or the domain isn't authorized — stay on login.
+
+      console.warn('Google sign-in failed:', err);
+
+    }
 
   };
 

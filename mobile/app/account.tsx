@@ -1,10 +1,10 @@
 import { useRouter } from 'expo-router';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { DesignFrame } from '../src/components/DesignFrame';
 import { ScreenShell } from '../src/components/ScreenShell';
 import { useRequireAuth } from '../src/hooks/useRequireAuth';
-import { signOut } from '../src/storage/session';
+import { getCurrentUser, signOut } from '../src/storage/session';
 import { colors } from '../src/theme';
 
 function BackArrow({ size = 23, color = '#000000' }: { size?: number; color?: string }) {
@@ -24,6 +24,7 @@ function BackArrow({ size = 23, color = '#000000' }: { size?: number; color?: st
 export default function AccountScreen() {
   const router = useRouter();
   useRequireAuth();
+  const user = getCurrentUser();
 
   function goBack() {
     if (router.canGoBack()) {
@@ -52,9 +53,18 @@ export default function AccountScreen() {
             <BackArrow />
           </Pressable>
 
-          <View style={styles.avatar} />
+          {user?.photoURL ? (
+            <Image
+              source={{ uri: user.photoURL }}
+              style={styles.avatar}
+              accessibilityIgnoresInvertColors
+            />
+          ) : (
+            <View style={styles.avatar} />
+          )}
 
-          <Text style={styles.name}>google account user</Text>
+          <Text style={styles.name}>{user?.name || 'google account user'}</Text>
+          {user?.email ? <Text style={styles.email}>{user.email}</Text> : null}
 
           <Pressable
             style={styles.logout}
@@ -104,6 +114,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 28,
     color: '#000000',
+  },
+  email: {
+    position: 'absolute',
+    top: 332,
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontFamily: 'Manrope, system-ui, sans-serif',
+    fontSize: 15,
+    lineHeight: 22,
+    color: 'rgba(0, 0, 0, 0.5)',
   },
   logout: {
     position: 'absolute',

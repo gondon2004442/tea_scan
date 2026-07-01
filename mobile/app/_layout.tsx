@@ -21,14 +21,16 @@ const rootStyle =
 
 export default function RootLayout() {
   const { loaded: fontsLoaded } = useAppFonts();
-  const [storageReady, setStorageReady] = useState(Platform.OS === 'web');
+  const [storageReady, setStorageReady] = useState(false);
   useTeaImagePreload(fontsLoaded && storageReady);
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      return;
+    // Web waits for the initial Firebase auth state; favorites hydrate on native.
+    const tasks = [hydrateSession()];
+    if (Platform.OS !== 'web') {
+      tasks.push(hydrateFavorites());
     }
-    void Promise.all([hydrateSession(), hydrateFavorites()]).then(() => {
+    void Promise.all(tasks).then(() => {
       setStorageReady(true);
     });
   }, []);
