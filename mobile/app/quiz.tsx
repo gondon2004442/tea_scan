@@ -156,13 +156,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.08)',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
+    paddingHorizontal: 24,
   },
   optionText: {
     fontFamily: 'Manrope, system-ui, sans-serif',
     fontSize: 16,
     color: colors.textPrimary,
+    textAlign: 'left',
   },
   resultsBox: {
     width: '100%',

@@ -1,12 +1,13 @@
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { AiResultCard } from '../src/components/AiResultCard';
 import { DesignFrame } from '../src/components/DesignFrame';
 import { FilterChips } from '../src/components/FilterChips';
 import { ScreenShell } from '../src/components/ScreenShell';
 import { ScrollUnderHeader } from '../src/components/ScrollUnderHeader';
 import { SearchBar, type PickedImage } from '../src/components/SearchBar';
+import { SearchIcon } from '../src/components/icons/TabIcons';
 import { TeaCard } from '../src/components/TeaCard';
 import { useTeaModal } from '../src/context/TeaModalContext';
 import { TEAS, getTeasByIds } from '../src/data/teas';
@@ -31,6 +32,7 @@ export default function ExploreScreen() {
   >(null);
 
   const [query, setQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<AiSearchResult | null>(null);
   const [aiError, setAiError] = useState<string | null>(null);
@@ -64,6 +66,16 @@ export default function ExploreScreen() {
     setAiResult(null);
     setAiError(null);
     setLocalIds(null);
+  }
+
+  function toggleSearch() {
+    if (searchOpen) {
+      setSearchOpen(false);
+      setQuery('');
+      resetSearch();
+    } else {
+      setSearchOpen(true);
+    }
   }
 
   async function runAiSearch(input: { query?: string; image?: PickedImage }) {
@@ -126,14 +138,27 @@ export default function ExploreScreen() {
           }}
           paddingTop={filtersTop}
           headerHeight={headerHeight}
+          headerExtra={
+            <Pressable
+              style={[styles.searchBtn, searchOpen && styles.searchBtnActive]}
+              onPress={toggleSearch}
+              accessibilityRole="button"
+              accessibilityLabel="Search"
+              hitSlop={8}
+            >
+              <SearchIcon color={searchOpen ? colors.white : colors.textPrimary} size={22} />
+            </Pressable>
+          }
         >
-          <SearchBar
-            value={query}
-            onChangeText={onChangeQuery}
-            onSubmit={onSubmitSearch}
-            onPickImage={onPickImage}
-            loading={aiLoading}
-          />
+          {searchOpen && (
+            <SearchBar
+              value={query}
+              onChangeText={onChangeQuery}
+              onSubmit={onSubmitSearch}
+              onPickImage={onPickImage}
+              loading={aiLoading}
+            />
+          )}
           {!aiResult && !localIds && (
             <FilterChips
               selectedTime={timeFilter}
@@ -164,6 +189,23 @@ export default function ExploreScreen() {
 }
 
 const styles = StyleSheet.create({
+  searchBtn: {
+    position: 'absolute',
+    top: layout.tabToggleTop,
+    right: layout.headerIconLeft,
+    width: layout.tabToggleHeight,
+    height: layout.tabToggleHeight,
+    borderRadius: layout.tabToggleHeight / 2,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.03)',
+  },
+  searchBtnActive: {
+    backgroundColor: colors.toggleActive,
+    borderColor: colors.white,
+  },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

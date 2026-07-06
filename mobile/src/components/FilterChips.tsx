@@ -82,9 +82,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 44,
     borderRadius: 1000,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.08)',
+    borderWidth: 1.5,
+    borderColor: colors.filterBorder,
+    borderStyle: 'dashed',
+    backgroundColor: 'transparent',
   },
   chipType: {
     flexDirection: 'row',
