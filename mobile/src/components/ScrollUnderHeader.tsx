@@ -18,6 +18,8 @@ type Props = {
   headerHeight?: number;
   contentContainerStyle?: StyleProp<ViewStyle>;
   headerExtra?: React.ReactNode;
+  /** When set, replaces the default ScreenHeader + headerExtra (e.g. search mode). */
+  headerOverride?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -30,6 +32,7 @@ export function ScrollUnderHeader({
   headerHeight,
   contentContainerStyle,
   headerExtra,
+  headerOverride,
   children,
 }: Props) {
   const chromeHeight = headerHeight ?? layout.exploreOnlyChromeHeight;
@@ -51,8 +54,12 @@ export function ScrollUnderHeader({
         style={[styles.chromeTop, { minHeight: chromeHeight }]}
         pointerEvents="box-none"
       >
-        <ScreenHeader activeTab={activeTab} tabMode={tabMode} onTabChange={onTabChange} />
-        {headerExtra}
+        {headerOverride ?? (
+          <>
+            <ScreenHeader activeTab={activeTab} tabMode={tabMode} onTabChange={onTabChange} />
+            {headerExtra}
+          </>
+        )}
       </View>
     </View>
   );

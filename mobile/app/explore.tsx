@@ -7,7 +7,7 @@ import { FilterChips } from '../src/components/FilterChips';
 import { ScreenShell } from '../src/components/ScreenShell';
 import { ScrollUnderHeader } from '../src/components/ScrollUnderHeader';
 import { SearchBar, type PickedImage } from '../src/components/SearchBar';
-import { SearchIcon } from '../src/components/icons/TabIcons';
+import { BackIcon, SearchIcon } from '../src/components/icons/TabIcons';
 import { TeaCard } from '../src/components/TeaCard';
 import { useTeaModal } from '../src/context/TeaModalContext';
 import { TEAS, getTeasByIds } from '../src/data/teas';
@@ -139,27 +139,44 @@ export default function ExploreScreen() {
           paddingTop={filtersTop}
           headerHeight={headerHeight}
           headerExtra={
-            <Pressable
-              style={[styles.searchBtn, searchOpen && styles.searchBtnActive]}
-              onPress={toggleSearch}
-              accessibilityRole="button"
-              accessibilityLabel="Search"
-              hitSlop={8}
-            >
-              <SearchIcon color={searchOpen ? colors.white : colors.textPrimary} size={22} />
-            </Pressable>
+            searchOpen ? undefined : (
+              <Pressable
+                style={styles.searchBtn}
+                onPress={toggleSearch}
+                accessibilityRole="button"
+                accessibilityLabel="Search"
+                hitSlop={8}
+              >
+                <SearchIcon color={colors.textPrimary} size={22} />
+              </Pressable>
+            )
+          }
+          headerOverride={
+            searchOpen ? (
+              <View style={styles.searchHeaderRow}>
+                <Pressable
+                  style={styles.backBtn}
+                  onPress={toggleSearch}
+                  accessibilityRole="button"
+                  accessibilityLabel="Close search"
+                  hitSlop={8}
+                >
+                  <BackIcon color={colors.textPrimary} size={24} />
+                </Pressable>
+                <SearchBar
+                  value={query}
+                  onChangeText={onChangeQuery}
+                  onSubmit={onSubmitSearch}
+                  onPickImage={onPickImage}
+                  loading={aiLoading}
+                  autoFocus
+                  style={styles.searchBarInHeader}
+                />
+              </View>
+            ) : undefined
           }
         >
-          {searchOpen && (
-            <SearchBar
-              value={query}
-              onChangeText={onChangeQuery}
-              onSubmit={onSubmitSearch}
-              onPickImage={onPickImage}
-              loading={aiLoading}
-            />
-          )}
-          {!aiResult && !localIds && (
+          {!searchOpen && !aiResult && !localIds && (
             <FilterChips
               selectedTime={timeFilter}
               selectedType={typeFilter}
@@ -202,9 +219,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.03)',
   },
-  searchBtnActive: {
-    backgroundColor: colors.toggleActive,
-    borderColor: colors.white,
+  searchHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: layout.tabToggleTop,
+    marginHorizontal: 13,
+    height: layout.tabToggleHeight,
+  },
+  backBtn: {
+    width: 36,
+    height: layout.tabToggleHeight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchBarInHeader: {
+    flex: 1,
+    marginHorizontal: 0,
+    marginBottom: 0,
   },
   grid: {
     flexDirection: 'row',

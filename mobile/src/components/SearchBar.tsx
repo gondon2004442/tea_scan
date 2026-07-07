@@ -1,4 +1,12 @@
-import { Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import { colors } from '../theme';
 import { CameraIcon, SearchIcon } from './icons/TabIcons';
 
@@ -10,6 +18,8 @@ type Props = {
   onSubmit: () => void;
   onPickImage: (image: PickedImage) => void;
   loading?: boolean;
+  autoFocus?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 /** Web file picker → base64 (no data: prefix). */
@@ -32,9 +42,17 @@ function pickImageWeb(onPick: (image: PickedImage) => void) {
   input.click();
 }
 
-export function SearchBar({ value, onChangeText, onSubmit, onPickImage, loading }: Props) {
+export function SearchBar({
+  value,
+  onChangeText,
+  onSubmit,
+  onPickImage,
+  loading,
+  autoFocus,
+  style,
+}: Props) {
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, style]}>
       <View style={styles.iconLeft}>
         <SearchIcon color="rgba(24, 0, 54, 0.5)" size={20} />
       </View>
@@ -47,6 +65,7 @@ export function SearchBar({ value, onChangeText, onSubmit, onPickImage, loading 
         placeholderTextColor="rgba(24, 0, 54, 0.4)"
         returnKeyType="search"
         editable={!loading}
+        autoFocus={autoFocus}
       />
       <Pressable
         style={styles.cameraBtn}

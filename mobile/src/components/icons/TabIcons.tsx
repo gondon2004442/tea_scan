@@ -59,3 +59,17 @@ export function CameraIcon({ color, size = 24 }: IconProps) {
     </Svg>
   );
 }
+
+export function BackIcon({ color, size = 24 }: IconProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <Path
+        d="M20 12H5M5 12L11 6M5 12L11 18"
+        stroke={color}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
