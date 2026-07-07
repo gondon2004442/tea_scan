@@ -43,12 +43,6 @@ export function FilterChips({
             <Text style={styles.chipText}>{f.label}</Text>
           </Pressable>
         ))}
-      </ScrollView>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.row}
-      >
         {TYPE_FILTERS.map((label) => (
           <Pressable
             key={label}
