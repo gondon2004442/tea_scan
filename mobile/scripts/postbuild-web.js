@@ -42,4 +42,33 @@ if (html.includes('<style id="expo-reset">')) {
     `<style id="expo-reset">${webCss}</style>`,
   );
 }
+
+// Expo `output: "single"` ignores app/+html.tsx, so inject PWA + SEO head tags
+// and the service-worker registration here (idempotent).
+const headTags = `
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#9CAAE4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Tea Scan" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <meta name="description" content="Tea Scan — каталог китайского чая с умным AI-поиском по фото и подбором в стиле гунфу-ча." />
+    <meta property="og:title" content="Tea Scan" />
+    <meta property="og:description" content="Каталог китайского чая, умный поиск и подбор в стиле гунфу-ча." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/icons/icon-512.png" />
+    <meta name="twitter:card" content="summary" />
+    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+`;
+if (!html.includes('rel="manifest"')) {
+  html = html.replace('</head>', `${headTags}  </head>`);
+}
+// Match the viewport meta to the app frame (notch-safe in standalone).
+html = html.replace(
+  '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
+  '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />',
+);
+
 fs.writeFileSync(indexPath, html);
