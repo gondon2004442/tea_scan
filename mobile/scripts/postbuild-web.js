@@ -65,6 +65,29 @@ const headTags = `
 if (!html.includes('rel="manifest"')) {
   html = html.replace('</head>', `${headTags}  </head>`);
 }
+
+// Multi-size brand favicon (crisper than Expo's single-size one) + SEO extras.
+const brandIco = path.join(__dirname, '..', 'assets', 'brand-favicon.ico');
+if (fs.existsSync(brandIco)) {
+  fs.copyFileSync(brandIco, path.join(dist, 'favicon.ico'));
+}
+
+const seoTags = `
+    <link rel="canonical" href="https://plantscanners.com/" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png" />
+    <script type="application/ld+json">${JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Tea Scan',
+      url: 'https://plantscanners.com/',
+      description:
+        'Каталог китайского чая с умным AI-поиском по фото и подбором в стиле гунфу-ча.',
+    })}</script>
+`;
+if (!html.includes('application/ld+json')) {
+  html = html.replace('</head>', `${seoTags}  </head>`);
+}
 // Match the viewport meta to the app frame (notch-safe in standalone).
 html = html.replace(
   '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />',
