@@ -1,30 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#F2EFE9"/>
-  <g fill="none" stroke="#141414" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="256" cy="256" r="188"/>
-
-    <!-- teapot body -->
-    <path d="M150 236
-             q0 -46 62 -54
-             q66 -8 92 30
-             q12 18 8 38
-             q-6 30 -54 38
-             q-58 10 -96 -14
-             q-12 -8 -12 -38 Z"/>
-    <!-- body band lines -->
-    <path d="M158 214 q60 -22 130 -6" opacity="0.9"/>
-    <path d="M150 246 q70 22 148 4" opacity="0.55"/>
-    <!-- lid knob -->
-    <circle cx="214" cy="184" r="9" fill="#141414" stroke="none"/>
-    <path d="M214 193 v9"/>
-    <!-- handle -->
-    <path d="M150 214 q-30 6 -30 40 q0 22 20 30"/>
-    <!-- spout -->
-    <path d="M298 238 q40 2 56 26 q6 10 -2 16 q-9 6 -18 -3 q-12 -16 -34 -21"/>
-    <!-- pour stream -->
-    <path d="M332 288 q7 26 5 46"/>
-    <!-- cup / bowl -->
-    <path d="M292 350 q42 40 88 0"/>
-    <path d="M328 382 l5 14 q3 8 11 8 h4 q8 0 11 -8 l5 -14"/>
+  <rect width="512" height="512" fill="#EEF5E3"/>
+  <circle cx="256" cy="256" r="188" fill="#ffffff"/>
+  <g>
+    <!-- stem -->
+    <path d="M256 356 C 256 320 256 300 256 286" fill="none" stroke="#5C8A3C" stroke-width="10" stroke-linecap="round"/>
+    <!-- back leaf (left) -->
+    <g transform="rotate(-34 256 340)">
+      <path d="M256 340 C 210 288 210 216 256 150 C 302 216 302 288 256 340 Z" fill="#5FA046"/>
+      <path d="M256 330 L256 168" stroke="#EAF5DE" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- front leaf (right) -->
+    <g transform="rotate(34 256 340)">
+      <path d="M256 340 C 210 288 210 216 256 150 C 302 216 302 288 256 340 Z" fill="#7BC24E"/>
+      <path d="M256 330 L256 168" stroke="#F1F8E9" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </g>
   </g>
 </svg>
