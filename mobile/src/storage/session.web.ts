@@ -1,28 +1,75 @@
-import { clearFavorites } from './favorites';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import {
+  browserLocalPersistence,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  setPersistence,
+  signInWithPopup,
+  signOut as firebaseSignOut,
+  type User,
+} from 'firebase/auth';
 
-const SIGNED_IN_KEY = 'tea-scan:signed-in';
+// Public web config (safe to ship in the client bundle).
+const firebaseConfig = {
+  apiKey: 'AIzaSyBFmIdNyKxcjqQzknw0U-Y3YbERhrljUQw',
+  authDomain: 'teascan.firebaseapp.com',
+  projectId: 'teascan',
+  storageBucket: 'teascan.firebasestorage.app',
+  messagingSenderId: '670551440970',
+  appId: '1:670551440970:web:1856a7a832f054691670b3',
+};
 
-export async function hydrateSession(): Promise<void> {
-  // localStorage is synchronous on web.
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export type SessionUser = {
+  name: string;
+  email: string;
+  photoURL: string | null;
+};
+
+let currentUser: SessionUser | null = null;
+
+function mapUser(u: User | null): SessionUser | null {
+  if (!u) return null;
+  return {
+    name: u.displayName ?? 'Google account user',
+    email: u.email ?? '',
+    photoURL: u.photoURL,
+  };
 }
 
-function isBrowser() {
-  return typeof window !== 'undefined' && !!window.localStorage;
+/** Resolve once the initial Firebase auth state is known; keep the cache updated after. */
+export function hydrateSession(): Promise<void> {
+  return new Promise((resolve) => {
+    let resolved = false;
+    onAuthStateChanged(auth, (u) => {
+      currentUser = mapUser(u);
+      if (!resolved) {
+        resolved = true;
+        resolve();
+      }
+    });
+  });
 }
 
-/** Preview-only mock sign-in. Replace with Google OAuth later. */
 export function isSignedIn(): boolean {
-  if (!isBrowser()) return false;
-  return window.localStorage.getItem(SIGNED_IN_KEY) === '1';
+  return currentUser !== null;
 }
 
-export function signInWithGoogleMock(): void {
-  if (!isBrowser()) return;
-  window.localStorage.setItem(SIGNED_IN_KEY, '1');
-  clearFavorites();
+export function getCurrentUser(): SessionUser | null {
+  return currentUser;
+}
+
+export async function signInWithGoogle(): Promise<void> {
+  await setPersistence(auth, browserLocalPersistence);
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  currentUser = mapUser(result.user);
 }
 
 export function signOut(): void {
-  if (!isBrowser()) return;
-  window.localStorage.removeItem(SIGNED_IN_KEY);
+  currentUser = null;
+  void firebaseSignOut(auth);
 }

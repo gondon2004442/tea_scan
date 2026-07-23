@@ -14,6 +14,7 @@
     "expo-linking": "^56.0.12",
     "expo-router": "^56.2.7",
     "expo-status-bar": "~56.0.4",
+    "firebase": "^12.15.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.85.3",
@@ -35,12 +36,13 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:web": "expo export --platform web --output-dir dist-web && node scripts/postbuild-web.js",
+    "build:web": "expo export --platform web --output-dir dist-web && node scripts/postbuild-web.js && node scripts/generate-seo.mjs",
     "preview:web": "npm run build:web && npx --yes serve dist-web -l 3000 -s",
     "verify:web": "node scripts/verify-web.mjs",
     "generate:data": "node scripts/generate-teas.mjs",
     "generate:icons": "node scripts/generate-app-icons.mjs",
-    "normalize:assets": "node scripts/normalize-png-assets.mjs"
+    "normalize:assets": "node scripts/normalize-png-assets.mjs",
+    "generate:seo": "node scripts/generate-seo.mjs"
   },
   "private": true,
   "overrides": {

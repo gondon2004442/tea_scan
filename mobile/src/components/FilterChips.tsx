@@ -43,12 +43,6 @@ export function FilterChips({
             <Text style={styles.chipText}>{f.label}</Text>
           </Pressable>
         ))}
-      </ScrollView>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.row}
-      >
         {TYPE_FILTERS.map((label) => (
           <Pressable
             key={label}
@@ -82,9 +76,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 44,
     borderRadius: 1000,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.08)',
+    borderWidth: 1.5,
+    borderColor: colors.filterBorder,
+    borderStyle: 'dashed',
+    backgroundColor: 'transparent',
   },
   chipType: {
     flexDirection: 'row',

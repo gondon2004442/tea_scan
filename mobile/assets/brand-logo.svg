@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#EEF5E3"/>
+  <circle cx="256" cy="256" r="188" fill="#ffffff"/>
+  <g>
+    <!-- stem -->
+    <path d="M256 356 C 256 320 256 300 256 286" fill="none" stroke="#5C8A3C" stroke-width="10" stroke-linecap="round"/>
+    <!-- back leaf (left) -->
+    <g transform="rotate(-34 256 340)">
+      <path d="M256 340 C 210 288 210 216 256 150 C 302 216 302 288 256 340 Z" fill="#5FA046"/>
+      <path d="M256 330 L256 168" stroke="#EAF5DE" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- front leaf (right) -->
+    <g transform="rotate(34 256 340)">
+      <path d="M256 340 C 210 288 210 216 256 150 C 302 216 302 288 256 340 Z" fill="#7BC24E"/>
+      <path d="M256 330 L256 168" stroke="#F1F8E9" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

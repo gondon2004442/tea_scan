@@ -1,0 +1,41 @@
+name: Deploy web to Firebase Hosting
+
+# Builds the Expo web export (with the Cloudflare Worker URL baked in) and
+# publishes it to the Firebase Hosting "live" channel — i.e. plantscanners.com.
+on:
+  push:
+    branches:
+      - main
+      - claude/plantscanners-work-gqxa4i
+  workflow_dispatch:
+
+# AI search/quiz call the Cloudflare Worker that holds the Anthropic key.
+env:
+  EXPO_PUBLIC_CHAT_API_URL: https://tea-scan-ai.dumax666.workers.dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Build static web export
+        working-directory: mobile
+        run: npm run build:web
+
+      - name: Deploy to Firebase Hosting (live)
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: teascan
+          channelId: live
